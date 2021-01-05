@@ -12,17 +12,15 @@ function preload()
   milkImg = loadImage("Milk.png")
   runningImg = loadImage("images/running.png")
   garden=loadImage("images/Garden.png");
-  washroom=loadImage("WashRoom.png");
-  bedroom=loadImage("images/BedRoom.png");
+  washroom=loadImage("images/Wash Room.png");
+  bedroom=loadImage("images/Bed Room.png");
 	//load images here
 }
 
 function setup() {
-
-  createCanvas(1000, 500);
-
   database = firebase.database();
- 
+  createCanvas(1000, 500);
+  
   foodObj = new Food();
 
   foodStock=database.ref('Food');
@@ -33,6 +31,7 @@ function setup() {
     lastFed=data.val();
   });
 
+  //read game state from database
   readState=database.ref('gameState');
   readState.on("value",function(data){
     gameState=data.val();
@@ -78,7 +77,7 @@ function draw() {
     
    }
 
-  foodObj.display();
+  //foodObj.display();
 
   drawSprites();
   //add styles here
@@ -92,9 +91,9 @@ function readStock(data){
 function feedDog(){
   dog.addImage(happyDog);
 
-  foodObj.writeStock(foodObj.getFoodStock()-1);
+  foodObj.updateFoodStock(foodObj.getFoodStock()-1);
   database.ref('/').update({
-   Food:foodObj.getFoodStock(),
+    Food:foodObj.getFoodStock(),
     FeedTime:hour(),
     gameState:"Hungry"
   })
